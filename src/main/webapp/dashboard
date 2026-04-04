@@ -1,0 +1,66 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%
+    // Check if user is logged in
+    if(session.getAttribute("userId") == null) {
+        response.sendRedirect("login");
+        return;
+    }
+    String fullName = (String) session.getAttribute("fullName");
+    String role = (String) session.getAttribute("role");
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Skyline CRM</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark px-4">
+        <span class="navbar-brand">🏢 Skyline CRM</span>
+        <span class="text-white">
+            Welcome, <%= fullName %> | Role: <%= role %>
+        </span>
+        <a href="logout" class="btn btn-danger btn-sm">Logout</a>
+    </nav>
+
+    <!-- Dashboard Cards -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5>Enquiries</h5>
+                        <h2>0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5>Clients</h5>
+                        <h2>0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body">
+                        <h5>Bookings</h5>
+                        <h2>0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-body">
+                        <h5>Leads</h5>
+                        <h2>0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
