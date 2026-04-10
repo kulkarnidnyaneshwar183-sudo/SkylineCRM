@@ -1,7 +1,9 @@
-import java.io.*;
+package com.crm;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
+import java.io.IOException;
 
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
@@ -9,6 +11,7 @@ public class LogoutServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
         request.getSession().invalidate();
-        response.sendRedirect("login");
+        response.sendRedirect(
+                request.getContextPath() + "/login");
     }
 }

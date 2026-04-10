@@ -1,0 +1,94 @@
+<%-- Navbar & Sidebar Fragment --%>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div class="bg-dark text-white border-end" id="sidebar-wrapper" style="min-width: 250px; min-height: 100vh;">
+        <div class="sidebar-heading border-bottom p-4 fs-4 fw-bold text-center text-primary">🏢 Skyline CRM</div>
+        <div class="list-group list-group-flush mt-3">
+            <a href="dashboard.jsp" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+            </a>
+            <a href="enquiries" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-chat-dots me-2"></i> Enquiries
+            </a>
+            <a href="leads" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-person-plus me-2"></i> Leads
+            </a>
+            <a href="clients" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-people me-2"></i> Clients
+            </a>
+            <a href="inventory" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-building me-2"></i> Inventory
+            </a>
+            <a href="expenses" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-wallet2 me-2"></i> Expenses
+            </a>
+            <a href="vendors" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-truck me-2"></i> Vendors
+            </a>
+            <a href="bookings" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-calendar-check me-2"></i> Bookings
+            </a>
+            <a href="tasks" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-list-check me-2"></i> Tasks
+            </a>
+            <a href="documents.jsp" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-file-earmark-text me-2"></i> Documents
+            </a>
+            <% if("Admin".equalsIgnoreCase((String)session.getAttribute("role"))) { %>
+                <a href="users" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                    <i class="bi bi-gear me-2"></i> User Management
+                </a>
+            <% } %>
+            <hr class="mx-4 bg-secondary">
+            <a href="logout" class="list-group-item list-group-item-action bg-dark text-danger border-0 py-3 px-4 mt-auto">
+                <i class="bi bi-box-arrow-left me-2"></i> Logout
+            </a>
+        </div>
+    </div>
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="w-100 bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 shadow-sm">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <%
+                        String profileImg = (String) session.getAttribute("profileImage");
+                        if(profileImg == null || profileImg.isEmpty()) profileImg = "default.png";
+                    %>
+                    <div class="position-relative">
+                        <img src="uploads/<%= profileImg %>" class="rounded-circle border me-3 shadow-sm" 
+                             style="width: 40px; height: 40px; object-fit: cover; cursor: pointer;" 
+                             data-bs-toggle="modal" data-bs-target="#profileModal"
+                             onerror="this.src='https://ui-avatars.com/api/?name=<%= session.getAttribute("fullName") %>&background=random'">
+                        <span class="position-absolute bottom-0 end-0 bg-primary rounded-circle border border-white" style="width: 12px; height: 12px; transform: translate(-10px, -5px);"></span>
+                    </div>
+                    <span class="navbar-text text-dark">
+                        Welcome back, <strong><%= session.getAttribute("fullName") %></strong> 
+                        <span class="badge bg-primary ms-2"><%= session.getAttribute("role") %></span>
+                    </span>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Profile Modal -->
+        <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content border-0 shadow" style="border-radius: 15px;">
+                    <div class="modal-header bg-dark text-white" style="border-radius: 15px 15px 0 0;">
+                        <h6 class="modal-title fw-bold">Update Profile Photo</h6>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="upload?type=profile" method="POST" enctype="multipart/form-data">
+                        <div class="modal-body text-center p-4">
+                            <img src="uploads/<%= profileImg %>" class="rounded-circle border mb-3 shadow-sm" 
+                                 style="width: 100px; height: 100px; object-fit: cover;"
+                                 onerror="this.src='https://ui-avatars.com/api/?name=<%= session.getAttribute("fullName") %>&background=random'">
+                            <input type="file" name="file" class="form-control form-control-sm" required>
+                        </div>
+                        <div class="modal-footer border-0 p-3 pt-0">
+                            <button type="submit" class="btn btn-primary btn-sm w-100 rounded-pill">Upload Photo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="p-4">

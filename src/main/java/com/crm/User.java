@@ -1,3 +1,5 @@
+package com.crm;
+
 public class User {
     private String userId;
     private String fullName;
@@ -5,17 +7,19 @@ public class User {
     private String password;
     private String role;
     private String status;
+    private String profileImage;
 
     // Constructor
     public User(String userId, String fullName,
                 String username, String password,
-                String role, String status) {
+                String role, String status, String profileImage) {
         this.userId = userId;
         this.fullName = fullName;
         this.username = username;
         this.password = password;
         this.role = role;
         this.status = status;
+        this.profileImage = profileImage;
     }
 
     // Getters
@@ -25,6 +29,7 @@ public class User {
     public String getPassword() { return password; }
     public String getRole() { return role; }
     public String getStatus() { return status; }
+    public String getProfileImage() { return profileImage; }
 
     // Setters
     public void setUserId(String userId) { this.userId = userId; }
@@ -33,4 +38,5 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public void setRole(String role) { this.role = role; }
     public void setStatus(String status) { this.status = status; }
+    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
 }
