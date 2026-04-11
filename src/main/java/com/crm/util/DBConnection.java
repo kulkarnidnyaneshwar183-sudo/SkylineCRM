@@ -1,4 +1,4 @@
-package com.crm;
+package com.crm.util;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -14,7 +14,7 @@ public class DBConnection {
         try (InputStream input = DBConnection.class.getClassLoader()
                 .getResourceAsStream("db.properties")) {
             if (input == null) {
-                System.err.println("❌ Sorry, unable to find db.properties");
+                System.out.println("Sorry, unable to find db.properties");
             } else {
                 properties.load(input);
                 Class.forName(properties.getProperty("db.driver"));

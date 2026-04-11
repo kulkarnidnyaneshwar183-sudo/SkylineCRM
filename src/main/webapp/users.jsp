@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.List, com.crm.User" %>
+<%@ page import="java.util.List, com.crm.model.User" %>
 <%
     if(session.getAttribute("userId") == null || !"Admin".equalsIgnoreCase((String)session.getAttribute("role"))) {
         response.sendRedirect("login");

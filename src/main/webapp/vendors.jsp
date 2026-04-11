@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.List, com.crm.Vendor" %>
+<%@ page import="java.util.List, com.crm.model.Vendor" %>
 <%
     if(session.getAttribute("userId") == null) {
         response.sendRedirect("login");
@@ -175,7 +175,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Payment Date</label>
-                            <input type="date" name="paymentDate" class="form-control" value="<%= new java.sql.Date(System.currentTimeMillis()) %>" required>
+                            <input type="date" name="paymentDate" class="form-control" value="<%= new java.sql.Date(java.lang.System.currentTimeMillis()) %>" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Method</label>

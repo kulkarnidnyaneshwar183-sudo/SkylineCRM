@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="com.crm.Lead" %>
+<%@ page import="com.crm.model.Lead" %>
 <%
     if(session.getAttribute("userId") == null) {
         response.sendRedirect("login");

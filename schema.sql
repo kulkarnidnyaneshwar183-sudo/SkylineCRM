@@ -124,6 +124,17 @@ CREATE TABLE IF NOT EXISTS vendor_payments (
     FOREIGN KEY (recorded_by) REFERENCES users(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS follow_ups (
+    follow_id INT AUTO_INCREMENT PRIMARY KEY,
+    lead_id INT,
+    follow_date DATETIME NOT NULL,
+    follow_type VARCHAR(50) NOT NULL, -- Call, Meeting, Email
+    notes TEXT,
+    status VARCHAR(20) DEFAULT 'Scheduled', -- Scheduled, Completed, Cancelled
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (lead_id) REFERENCES leads(lead_id) ON DELETE CASCADE
+);
+
 -- Optional: Insert initial admin user
 INSERT INTO users (user_id, full_name, username, password, role, status) 
 VALUES ('ADMIN001', 'Admin User', 'admin', 'admin123', 'Admin', 'Active');

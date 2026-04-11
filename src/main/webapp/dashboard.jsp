@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.sql.*, com.crm.DBConnection" %>
+<%@ page import="java.sql.*, com.crm.util.DBConnection" %>
 <%
     if(session.getAttribute("userId") == null) {
         response.sendRedirect("login");
@@ -7,16 +7,16 @@
     }
     String role = (String) session.getAttribute("role");
     
-    int clientCount = 0, leadCount = 0, activeUserCount = 0, pendingTaskCount = 0;
+    int enquiryCount = 0, leadCount = 0, bookingCount = 0, pendingTaskCount = 0;
     Connection con = null;
     Statement st = null;
     try {
         con = DBConnection.getConnection();
         st = con.createStatement();
         
-        // 1. Total Customers
-        ResultSet rs1 = st.executeQuery("SELECT COUNT(*) FROM clients");
-        if(rs1.next()) clientCount = rs1.getInt(1);
+        // 1. Total Enquiries
+        ResultSet rs1 = st.executeQuery("SELECT COUNT(*) FROM enquiries");
+        if(rs1.next()) enquiryCount = rs1.getInt(1);
         rs1.close();
         
         // 2. Total Leads
@@ -24,9 +24,9 @@
         if(rs2.next()) leadCount = rs2.getInt(1);
         rs2.close();
         
-        // 3. Active Users
-        ResultSet rs3 = st.executeQuery("SELECT COUNT(*) FROM users WHERE status = 'Active'");
-        if(rs3.next()) activeUserCount = rs3.getInt(1);
+        // 3. Total Bookings
+        ResultSet rs3 = st.executeQuery("SELECT COUNT(*) FROM bookings");
+        if(rs3.next()) bookingCount = rs3.getInt(1);
         rs3.close();
         
         // 4. Tasks Pending
@@ -59,21 +59,21 @@
     <%@ include file="WEB-INF/sidebar.jspf" %>
 
     <div class="container-fluid">
-        <h3 class="mb-4 fw-bold">System Performance</h3>
+        <h3 class="mb-4 fw-bold">Performance Overview</h3>
         
         <div class="row g-4">
-            <!-- Customer Card -->
+            <!-- Enquiries Card -->
             <div class="col-md-3">
                 <div class="card stat-card shadow-sm h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="icon-box bg-primary bg-opacity-10 text-primary">
-                                <i class="bi bi-people"></i>
+                            <div class="icon-box bg-info bg-opacity-10 text-info">
+                                <i class="bi bi-chat-dots"></i>
                             </div>
-                            <span class="badge bg-primary rounded-pill">Total</span>
+                            <span class="badge bg-info rounded-pill">Recent</span>
                         </div>
-                        <h6 class="text-muted mb-1">Total Customers</h6>
-                        <h2 class="fw-bold mb-0"><%= clientCount %></h2>
+                        <h6 class="text-muted mb-1">Total Enquiries</h6>
+                        <h2 class="fw-bold mb-0 text-info"><%= enquiryCount %></h2>
                     </div>
                 </div>
             </div>
@@ -89,23 +89,23 @@
                             <span class="badge bg-danger rounded-pill">Pipeline</span>
                         </div>
                         <h6 class="text-muted mb-1">Total Leads</h6>
-                        <h2 class="fw-bold mb-0"><%= leadCount %></h2>
+                        <h2 class="fw-bold mb-0 text-danger"><%= leadCount %></h2>
                     </div>
                 </div>
             </div>
 
-            <!-- Active Users Card -->
+            <!-- Bookings Card -->
             <div class="col-md-3">
                 <div class="card stat-card shadow-sm h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="icon-box bg-success bg-opacity-10 text-success">
-                                <i class="bi bi-person-check"></i>
+                                <i class="bi bi-calendar-check"></i>
                             </div>
-                            <span class="badge bg-success rounded-pill">Active</span>
+                            <span class="badge bg-success rounded-pill">Closed</span>
                         </div>
-                        <h6 class="text-muted mb-1">Active Users</h6>
-                        <h2 class="fw-bold mb-0 text-success"><%= activeUserCount %></h2>
+                        <h6 class="text-muted mb-1">Total Bookings</h6>
+                        <h2 class="fw-bold mb-0 text-success"><%= bookingCount %></h2>
                     </div>
                 </div>
             </div>
@@ -131,16 +131,25 @@
         <div class="row mt-5">
             <div class="col-md-8">
                 <div class="card border-0 shadow-sm p-4 h-100" style="border-radius: 15px;">
-                    <h5 class="fw-bold mb-4">Operational Shortcuts</h5>
+                    <h5 class="fw-bold mb-4">Quick Navigation</h5>
                     <div class="d-flex flex-wrap gap-3">
+                        <a href="enquiries" class="btn btn-outline-info px-4 rounded-pill">
+                            <i class="bi bi-chat-dots me-2"></i>Enquiries
+                        </a>
                         <a href="leads" class="btn btn-outline-danger px-4 rounded-pill">
-                            <i class="bi bi-plus-circle me-2"></i>New Lead
+                            <i class="bi bi-plus-circle me-2"></i>Leads
                         </a>
-                        <a href="tasks" class="btn btn-outline-dark px-4 rounded-pill">
-                            <i class="bi bi-list-check me-2"></i>Assign Task
+                        <a href="bookings" class="btn btn-outline-success px-4 rounded-pill">
+                            <i class="bi bi-calendar-check me-2"></i>Bookings
                         </a>
-                        <a href="clients" class="btn btn-outline-primary px-4 rounded-pill">
-                            <i class="bi bi-person-add me-2"></i>Add Customer
+                        <a href="tasks" class="btn btn-outline-warning text-dark px-4 rounded-pill">
+                            <i class="bi bi-list-check me-2"></i>Tasks
+                        </a>
+                        <a href="inventory" class="btn btn-outline-primary px-4 rounded-pill">
+                            <i class="bi bi-building me-2"></i>Inventory
+                        </a>
+                        <a href="expenses" class="btn btn-outline-secondary px-4 rounded-pill">
+                            <i class="bi bi-wallet2 me-2"></i>Expenses
                         </a>
                     </div>
                 </div>
@@ -149,8 +158,8 @@
                 <div class="card border-0 shadow-sm p-4 h-100 text-center bg-dark text-white" style="border-radius: 15px;">
                     <div class="my-auto">
                         <i class="bi bi-rocket-takeoff text-primary display-4"></i>
-                        <h5 class="mt-3 fw-bold">CRM Power Mode</h5>
-                        <p class="text-white-50 small">Monitor your team's productivity and customer growth in real-time.</p>
+                        <h5 class="mt-3 fw-bold">Skyline Performance</h5>
+                        <p class="text-white-50 small">Monitor your company's growth and team productivity in real-time.</p>
                     </div>
                 </div>
             </div>

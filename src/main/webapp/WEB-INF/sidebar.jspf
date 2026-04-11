@@ -13,6 +13,9 @@
             <a href="leads" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
                 <i class="bi bi-person-plus me-2"></i> Leads
             </a>
+            <a href="followups" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
+                <i class="bi bi-calendar-event me-2"></i> Follow-ups
+            </a>
             <a href="clients" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
                 <i class="bi bi-people me-2"></i> Clients
             </a>

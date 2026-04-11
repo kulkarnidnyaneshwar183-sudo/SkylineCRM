@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.sql.*, com.crm.DBConnection" %>
+<%@ page import="java.sql.*, com.crm.util.DBConnection" %>
 <%
     if(session.getAttribute("userId") == null) {
         response.sendRedirect("login");

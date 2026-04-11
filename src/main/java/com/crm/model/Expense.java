@@ -1,4 +1,4 @@
-package com.crm;
+package com.crm.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -28,7 +28,6 @@ public class Expense {
         this.createdAt = createdAt;
     }
 
-    // Getters and Setters
     public int getExpenseId() { return expenseId; }
     public String getTitle() { return title; }
     public String getCategory() { return category; }

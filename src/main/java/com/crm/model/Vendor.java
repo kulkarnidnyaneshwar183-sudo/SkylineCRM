@@ -1,4 +1,4 @@
-package com.crm;
+package com.crm.model;
 
 import java.sql.Timestamp;
 
@@ -23,7 +23,6 @@ public class Vendor {
         this.createdAt = createdAt;
     }
 
-    // Getters and Setters
     public int getVendorId() { return vendorId; }
     public String getVendorName() { return vendorName; }
     public String getContactPerson() { return contactPerson; }
