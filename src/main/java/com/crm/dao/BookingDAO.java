@@ -28,6 +28,7 @@ public class BookingDAO {
                     rs.getDate("booking_date"),
                     rs.getDouble("total_amount"),
                     rs.getDouble("paid_amount"),
+                    rs.getDouble("remaining_amount"),
                     rs.getString("status"),
                     rs.getTimestamp("created_at")
                 ));
@@ -45,7 +46,7 @@ public class BookingDAO {
             con.setAutoCommit(false);
 
             // 1. Insert booking
-            String sql = "INSERT INTO bookings (client_id, flat_id, booking_type, booking_date, total_amount, paid_amount, status) VALUES (?, ?, ?, ?, ?, ?, 'Confirmed')";
+            String sql = "INSERT INTO bookings (client_id, flat_id, booking_type, booking_date, total_amount, paid_amount, remaining_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, booking.getClientId());
             ps.setInt(2, booking.getFlatId());
@@ -53,6 +54,8 @@ public class BookingDAO {
             ps.setDate(4, booking.getBookingDate());
             ps.setDouble(5, booking.getTotalAmount());
             ps.setDouble(6, initialPayment);
+            ps.setDouble(7, booking.getTotalAmount() - initialPayment);
+            ps.setString(8, "Pending"); // Initial status in flow
             ps.executeUpdate();
             
             ResultSet rs = ps.getGeneratedKeys();
@@ -69,7 +72,14 @@ public class BookingDAO {
             }
 
             // 3. Update flat status
-            String flatStatus = "Reservation".equals(booking.getBookingType()) ? "Reserved" : "Booked";
+            String flatStatus;
+            if ("Reservation".equals(booking.getBookingType())) {
+                flatStatus = "Reserved";
+            } else if ("Site Visit".equals(booking.getBookingType())) {
+                flatStatus = "Available"; // Site visit doesn't block the flat
+            } else {
+                flatStatus = "Booked";
+            }
             PreparedStatement psFlat = con.prepareStatement("UPDATE flats SET status = ? WHERE flat_id = ?");
             psFlat.setString(1, flatStatus);
             psFlat.setInt(2, booking.getFlatId());
@@ -83,6 +93,19 @@ public class BookingDAO {
             return false;
         } finally {
             if(con != null) try { con.setAutoCommit(true); con.close(); } catch(SQLException e) {}
+        }
+    }
+
+    public boolean updateBookingStatus(int bookingId, String status) {
+        String sql = "UPDATE bookings SET status = ? WHERE booking_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, bookingId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -100,10 +123,11 @@ public class BookingDAO {
             ps.setString(4, method);
             ps.executeUpdate();
 
-            // 2. Update booking paid_amount
-            ps = con.prepareStatement("UPDATE bookings SET paid_amount = paid_amount + ? WHERE booking_id = ?");
+            // 2. Update booking paid_amount and remaining_amount
+            ps = con.prepareStatement("UPDATE bookings SET paid_amount = paid_amount + ?, remaining_amount = remaining_amount - ? WHERE booking_id = ?");
             ps.setDouble(1, amount);
-            ps.setInt(2, bookingId);
+            ps.setDouble(2, amount);
+            ps.setInt(3, bookingId);
             ps.executeUpdate();
 
             con.commit();

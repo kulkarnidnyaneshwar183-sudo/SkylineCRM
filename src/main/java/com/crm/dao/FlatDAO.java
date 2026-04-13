@@ -30,6 +30,29 @@ public class FlatDAO {
         return flats;
     }
 
+    public List<Flat> getAvailableFlats() {
+        List<Flat> flats = new ArrayList<>();
+        String sql = "SELECT * FROM flats WHERE status = 'Available' ORDER BY building_name, flat_number";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                flats.add(new Flat(
+                    rs.getInt("flat_id"),
+                    rs.getString("flat_number"),
+                    rs.getString("building_name"),
+                    rs.getInt("floor"),
+                    rs.getString("bhk"),
+                    rs.getDouble("area_sqft"),
+                    rs.getDouble("price"),
+                    rs.getString("status"),
+                    rs.getTimestamp("created_at")
+                ));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return flats;
+    }
+
     public boolean addFlat(Flat flat) {
         String sql = "INSERT INTO flats (flat_number, building_name, floor, bhk, area_sqft, price, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();

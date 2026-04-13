@@ -27,14 +27,19 @@ public class BookingServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             bookingDAO.deleteBooking(id);
             response.sendRedirect("bookings");
+        } else if ("updateStatus".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String status = request.getParameter("status");
+            bookingDAO.updateBookingStatus(id, status);
+            response.sendRedirect("bookings");
         } else {
             List<Booking> bookings = bookingDAO.getAllBookings();
             List<Client> clients = clientDAO.getAllClients();
-            List<Flat> flats = flatDAO.getAllFlats();
+            List<Flat> availableFlats = flatDAO.getAvailableFlats();
             
             request.setAttribute("bookingList", bookings);
             request.setAttribute("clientList", clients);
-            request.setAttribute("flatList", flats);
+            request.setAttribute("flatList", availableFlats); // Only available flats for new booking
             request.getRequestDispatcher("bookings.jsp").forward(request, response);
         }
     }
@@ -44,15 +49,33 @@ public class BookingServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         if ("add".equals(action)) {
-            int clientId = Integer.parseInt(request.getParameter("clientId"));
-            int flatId = Integer.parseInt(request.getParameter("flatId"));
-            String type = request.getParameter("bookingType");
-            Date date = Date.valueOf(request.getParameter("bookingDate"));
-            double total = Double.parseDouble(request.getParameter("totalAmount"));
-            double initialPay = Double.parseDouble(request.getParameter("initialPayment"));
+            String clientIdStr = request.getParameter("clientId");
+            String flatIdStr = request.getParameter("flatId");
+            
+            if (clientIdStr == null || clientIdStr.isEmpty() || flatIdStr == null || flatIdStr.isEmpty()) {
+                response.sendRedirect("bookings?error=Please select a valid client and flat from the list.");
+                return;
+            }
 
-            Booking booking = new Booking(0, clientId, null, flatId, null, type, date, total, initialPay, "Confirmed", null);
-            bookingDAO.addBooking(booking, initialPay);
+            try {
+                int clientId = Integer.parseInt(clientIdStr);
+                int flatId = Integer.parseInt(flatIdStr);
+                String type = request.getParameter("bookingType");
+                Date date = Date.valueOf(request.getParameter("bookingDate"));
+                double total = Double.parseDouble(request.getParameter("totalAmount"));
+                double initialPay = Double.parseDouble(request.getParameter("initialPayment"));
+
+                Booking booking = new Booking(0, clientId, null, flatId, null, type, date, total, initialPay, total - initialPay, "Pending", null);
+                if (bookingDAO.addBooking(booking, initialPay)) {
+                    response.sendRedirect("bookings?success=Booking created successfully.");
+                } else {
+                    response.sendRedirect("bookings?error=Failed to save booking. Ensure database is updated and property is available.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendRedirect("bookings?error=Invalid data provided: " + e.getMessage());
+            }
+            return;
         } else if ("addPayment".equals(action)) {
             int bookingId = Integer.parseInt(request.getParameter("bookingId"));
             double amount = Double.parseDouble(request.getParameter("amount"));

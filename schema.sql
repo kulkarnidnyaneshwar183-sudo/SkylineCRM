@@ -46,12 +46,27 @@ CREATE TABLE IF NOT EXISTS clients (
 CREATE TABLE IF NOT EXISTS bookings (
     booking_id INT AUTO_INCREMENT PRIMARY KEY,
     client_id INT,
-    service_name VARCHAR(100) NOT NULL,
+    flat_id INT,
+    booking_type VARCHAR(50),
     booking_date DATE NOT NULL,
-    amount DECIMAL(10, 2),
-    status VARCHAR(20) DEFAULT 'Confirmed',
+    total_amount DECIMAL(15, 2),
+    paid_amount DECIMAL(15, 2) DEFAULT 0,
+    remaining_amount DECIMAL(15, 2) DEFAULT 0,
+    status VARCHAR(20) DEFAULT 'Pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (client_id) REFERENCES clients(client_id)
+    FOREIGN KEY (client_id) REFERENCES clients(client_id),
+    FOREIGN KEY (flat_id) REFERENCES flats(flat_id)
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id INT,
+    amount DECIMAL(15, 2) NOT NULL,
+    payment_date DATE NOT NULL,
+    payment_method VARCHAR(50),
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS tasks (

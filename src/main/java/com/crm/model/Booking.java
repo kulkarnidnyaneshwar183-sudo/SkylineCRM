@@ -13,10 +13,11 @@ public class Booking {
     private Date bookingDate;
     private double totalAmount;
     private double paidAmount;
+    private double remainingAmount;
     private String status;
     private Timestamp createdAt;
 
-    public Booking(int bookingId, int clientId, String clientName, int flatId, String flatNumber, String bookingType, Date bookingDate, double totalAmount, double paidAmount, String status, Timestamp createdAt) {
+    public Booking(int bookingId, int clientId, String clientName, int flatId, String flatNumber, String bookingType, Date bookingDate, double totalAmount, double paidAmount, double remainingAmount, String status, Timestamp createdAt) {
         this.bookingId = bookingId;
         this.clientId = clientId;
         this.clientName = clientName;
@@ -26,6 +27,7 @@ public class Booking {
         this.bookingDate = bookingDate;
         this.totalAmount = totalAmount;
         this.paidAmount = paidAmount;
+        this.remainingAmount = remainingAmount;
         this.status = status;
         this.createdAt = createdAt;
     }
@@ -39,7 +41,7 @@ public class Booking {
     public Date getBookingDate() { return bookingDate; }
     public double getTotalAmount() { return totalAmount; }
     public double getPaidAmount() { return paidAmount; }
+    public double getRemainingAmount() { return remainingAmount; }
     public String getStatus() { return status; }
     public Timestamp getCreatedAt() { return createdAt; }
-    public double getRemainingAmount() { return totalAmount - paidAmount; }
 }
