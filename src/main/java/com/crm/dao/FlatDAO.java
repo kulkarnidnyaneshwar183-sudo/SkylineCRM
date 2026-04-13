@@ -23,6 +23,7 @@ public class FlatDAO {
                     rs.getDouble("area_sqft"),
                     rs.getDouble("price"),
                     rs.getString("status"),
+                    rs.getString("image_url"),
                     rs.getTimestamp("created_at")
                 ));
             }
@@ -46,6 +47,7 @@ public class FlatDAO {
                     rs.getDouble("area_sqft"),
                     rs.getDouble("price"),
                     rs.getString("status"),
+                    rs.getString("image_url"),
                     rs.getTimestamp("created_at")
                 ));
             }
@@ -54,7 +56,7 @@ public class FlatDAO {
     }
 
     public boolean addFlat(Flat flat) {
-        String sql = "INSERT INTO flats (flat_number, building_name, floor, bhk, area_sqft, price, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO flats (flat_number, building_name, floor, bhk, area_sqft, price, status, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, flat.getFlatNumber());
@@ -64,6 +66,7 @@ public class FlatDAO {
             ps.setDouble(5, flat.getAreaSqft());
             ps.setDouble(6, flat.getPrice());
             ps.setString(7, flat.getStatus());
+            ps.setString(8, flat.getImageUrl());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) { e.printStackTrace(); return false; }
     }

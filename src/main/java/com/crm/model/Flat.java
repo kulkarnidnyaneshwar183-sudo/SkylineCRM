@@ -11,9 +11,10 @@ public class Flat {
     private double areaSqft;
     private double price;
     private String status;
+    private String imageUrl;
     private Timestamp createdAt;
 
-    public Flat(int flatId, String flatNumber, String buildingName, int floor, String bhk, double areaSqft, double price, String status, Timestamp createdAt) {
+    public Flat(int flatId, String flatNumber, String buildingName, int floor, String bhk, double areaSqft, double price, String status, String imageUrl, Timestamp createdAt) {
         this.flatId = flatId;
         this.flatNumber = flatNumber;
         this.buildingName = buildingName;
@@ -22,6 +23,7 @@ public class Flat {
         this.areaSqft = areaSqft;
         this.price = price;
         this.status = status;
+        this.imageUrl = imageUrl;
         this.createdAt = createdAt;
     }
 
@@ -33,5 +35,6 @@ public class Flat {
     public double getAreaSqft() { return areaSqft; }
     public double getPrice() { return price; }
     public String getStatus() { return status; }
+    public String getImageUrl() { return imageUrl; }
     public Timestamp getCreatedAt() { return createdAt; }
 }

@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS flats (
     area_sqft DECIMAL(10, 2),
     price DECIMAL(15, 2),
     status VARCHAR(20) DEFAULT 'Available',
+    image_url VARCHAR(255) DEFAULT 'https://via.placeholder.com/300x200?text=No+Image',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -151,5 +152,5 @@ CREATE TABLE IF NOT EXISTS follow_ups (
 );
 
 -- Optional: Insert initial admin user
-INSERT INTO users (user_id, full_name, username, password, role, status) 
+INSERT IGNORE INTO users (user_id, full_name, username, password, role, status) 
 VALUES ('ADMIN001', 'Admin User', 'admin', 'admin123', 'Admin', 'Active');

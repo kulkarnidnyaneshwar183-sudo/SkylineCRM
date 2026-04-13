@@ -39,8 +39,12 @@ public class FlatServlet extends HttpServlet {
             double areaSqft = Double.parseDouble(request.getParameter("areaSqft"));
             double price = Double.parseDouble(request.getParameter("price"));
             String status = request.getParameter("status");
+            String imageUrl = request.getParameter("imageUrl");
+            if (imageUrl == null || imageUrl.isEmpty()) {
+                imageUrl = "https://via.placeholder.com/300x200?text=No+Image";
+            }
 
-            Flat flat = new Flat(0, flatNumber, buildingName, floor, bhk, areaSqft, price, status, null);
+            Flat flat = new Flat(0, flatNumber, buildingName, floor, bhk, areaSqft, price, status, imageUrl, null);
             flatDAO.addFlat(flat);
         } else if ("update".equals(action)) {
             int flatId = Integer.parseInt(request.getParameter("flatId"));
