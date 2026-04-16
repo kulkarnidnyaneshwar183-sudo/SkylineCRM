@@ -16,6 +16,17 @@ Skyline CRM is a comprehensive Customer Relationship Management (CRM) applicatio
 - **👔 Vendor & Task Management:** Keep track of services and daily operations.
 - **📂 Document Repository:** Centralized storage for client and property documents.
 
+## 🔄 Project Flow
+
+The application follows a standard real estate sales lifecycle:
+
+1.  **Enquiry:** Initial contact from a potential customer.
+2.  **Lead:** Qualified enquiry showing active interest.
+3.  **Client:** Lead converted after committing to a property.
+4.  **Booking:** Formalizing the sale and selecting a specific unit.
+5.  **Payment:** Tracking installments and financial progress.
+6.  **Completion:** Final handover and closing of the deal.
+
 ## 🛠️ Tech Stack
 
 - **Backend:** Java 8, Servlets 4.0, JSP 2.3
