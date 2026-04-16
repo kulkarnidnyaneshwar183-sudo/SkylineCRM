@@ -72,5 +72,9 @@ mvn clean install tomcat7:run
 - **Username:** `admin`
 - **Password:** `admin123`
 
+## 👤 Author
+
+- **Dnyaneshwar Kulkarni** - [@kulkarnidnyaneshwar183-sudo](https://github.com/kulkarnidnyaneshwar183-sudo)
+
 ---
 *Developed for Skyline Real Estate CRM.*
