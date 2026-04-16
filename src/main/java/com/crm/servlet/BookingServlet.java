@@ -6,6 +6,7 @@ import com.crm.dao.FlatDAO;
 import com.crm.model.Booking;
 import com.crm.model.Client;
 import com.crm.model.Flat;
+import com.crm.model.Payment;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -32,7 +33,9 @@ public class BookingServlet extends HttpServlet {
             String status = request.getParameter("status");
             bookingDAO.updateBookingStatus(id, status);
             response.sendRedirect("bookings");
-        } else {
+        } else if ("viewPayments".equals(action)) {
+            handleViewPayments(request, response);
+            } else {
             List<Booking> bookings = bookingDAO.getAllBookings();
             List<Client> clients = clientDAO.getAllClients();
             List<Flat> availableFlats = flatDAO.getAvailableFlats();
@@ -42,6 +45,25 @@ public class BookingServlet extends HttpServlet {
             request.setAttribute("flatList", availableFlats); // Only available flats for new booking
             request.getRequestDispatcher("bookings.jsp").forward(request, response);
         }
+    }
+
+    private void handleViewPayments(HttpServletRequest request, HttpServletResponse response) 
+            throws IOException {
+        int bookingId = Integer.parseInt(request.getParameter("id"));
+        List<Payment> payments = bookingDAO.getPaymentsByBookingId(bookingId);
+        
+        response.setContentType("application/json");
+        StringBuilder json = new StringBuilder("[");
+        for (int i = 0; i < payments.size(); i++) {
+            Payment p = payments.get(i);
+            json.append(String.format(
+                "{\"date\":\"%s\", \"amount\":%.2f, \"method\":\"%s\", \"notes\":\"%s\"}",
+                p.getPaymentDate().toString(), p.getAmount(), p.getPaymentMethod(), p.getNotes() != null ? p.getNotes() : ""
+            ));
+            if (i < payments.size() - 1) json.append(",");
+        }
+        json.append("]");
+        response.getWriter().write(json.toString());
     }
 
     @Override

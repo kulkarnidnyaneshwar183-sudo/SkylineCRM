@@ -111,6 +111,12 @@
                                     </td>
                                     <td class="small"><%= b.getBookingDate() %></td>
                                     <td class="pe-4 text-end">
+                                        <button class="btn btn-sm btn-outline-info me-1" 
+                                                onclick="viewPaymentHistory(<%= b.getBookingId() %>, '<%= b.getClientName() %>')"
+                                                data-bs-toggle="modal" data-bs-target="#paymentHistoryModal"
+                                                title="View History">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
                                         <button class="btn btn-sm btn-outline-success me-1" 
                                                 onclick="setPaymentBooking(<%= b.getBookingId() %>, '<%= b.getClientName() %>', <%= b.getRemainingAmount() %>)"
                                                 data-bs-toggle="modal" data-bs-target="#payInstallmentModal"
@@ -201,7 +207,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-uppercase text-muted">Booking Date</label>
-                                <input type="date" name="bookingDate" class="form-control shadow-sm" value="<%= new java.sql.Date(new java.util.Date().getTime()) %>" required>
+                                <input type="date" name="bookingDate" class="form-control shadow-sm" value="<%= java.time.LocalDate.now() %>" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-uppercase text-muted">Total Deal Price (₹)</label>
@@ -241,7 +247,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Payment Date</label>
-                            <input type="date" name="paymentDate" class="form-control" value="<%= new java.sql.Date(new java.util.Date().getTime()) %>" required>
+                            <input type="date" name="paymentDate" class="form-control" value="<%= java.time.LocalDate.now() %>" required>
                         </div>
                         <div class="mb-0">
                             <label class="form-label small fw-bold">Payment Method</label>
@@ -261,11 +267,73 @@
         </div>
     </div>
 
+        </div>
+    </div>
+
+    <!-- Payment History Modal -->
+    <div class="modal fade" id="paymentHistoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content border-0 shadow" style="border-radius: 15px;">
+                <div class="modal-header bg-info text-white" style="border-radius: 15px 15px 0 0;">
+                    <h5 class="modal-title fw-bold">Payment History</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="p-3 bg-light border-bottom">
+                        <small class="text-muted text-uppercase fw-bold">Client</small>
+                        <div id="historyClientName" class="fw-bold fs-5 text-primary"></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr class="small text-uppercase">
+                                    <th class="ps-3">Date</th>
+                                    <th>Method</th>
+                                    <th class="text-end pe-3">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentHistoryBody">
+                                <!-- Loaded via AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div><!-- Close page-content-wrapper -->
 </div><!-- Close d-flex wrapper -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    function viewPaymentHistory(bookingId, clientName) {
+        document.getElementById('historyClientName').innerText = clientName;
+        const tbody = document.getElementById('paymentHistoryBody');
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div></td></tr>';
+        
+        fetch('bookings?action=viewPayments&id=' + bookingId)
+            .then(response => response.json())
+            .then(data => {
+                tbody.innerHTML = '';
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">No payments recorded.</td></tr>';
+                } else {
+                    data.forEach(p => {
+                        const row = `<tr>
+                            <td class="ps-3 small">${p.date}</td>
+                            <td><span class="badge bg-light text-dark border">${p.method}</span></td>
+                            <td class="text-end pe-3 fw-bold text-success">₹${parseFloat(p.amount).toLocaleString()}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                }
+            })
+            .catch(err => {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-danger">Error loading history.</td></tr>';
+            });
+    }
+
     // Searchable Datatables Logic
     document.getElementById('clientSearchInput').addEventListener('input', function() {
         const value = this.value;

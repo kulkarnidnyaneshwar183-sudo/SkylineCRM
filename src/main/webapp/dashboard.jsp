@@ -8,6 +8,8 @@
     String role = (String) session.getAttribute("role");
     
     int enquiryCount = 0, leadCount = 0, bookingCount = 0, pendingTaskCount = 0;
+    int clientCount = 0, inventoryCount = 0;
+    double totalRevenue = 0, totalCollection = 0;
     Connection con = null;
     Statement st = null;
     try {
@@ -33,6 +35,24 @@
         ResultSet rs4 = st.executeQuery("SELECT COUNT(*) FROM tasks WHERE status = 'Pending'");
         if(rs4.next()) pendingTaskCount = rs4.getInt(1);
         rs4.close();
+
+        // 5. Total Clients
+        ResultSet rs5 = st.executeQuery("SELECT COUNT(*) FROM clients");
+        if(rs5.next()) clientCount = rs5.getInt(1);
+        rs5.close();
+
+        // 6. Total Inventory
+        ResultSet rs6 = st.executeQuery("SELECT COUNT(*) FROM flats");
+        if(rs6.next()) inventoryCount = rs6.getInt(1);
+        rs6.close();
+
+        // 7. Revenue & Collection
+        ResultSet rs7 = st.executeQuery("SELECT SUM(total_amount), SUM(paid_amount) FROM bookings");
+        if(rs7.next()) {
+            totalRevenue = rs7.getDouble(1);
+            totalCollection = rs7.getDouble(2);
+        }
+        rs7.close();
         
     } catch (Exception e) {
         e.printStackTrace();
@@ -62,18 +82,34 @@
         <h3 class="mb-4 fw-bold">Performance Overview</h3>
         
         <div class="row g-4">
-            <!-- Enquiries Card -->
+            <!-- Revenue Card -->
             <div class="col-md-3">
-                <div class="card stat-card shadow-sm h-100">
+                <div class="card stat-card shadow-sm h-100 bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="icon-box bg-info bg-opacity-10 text-info">
-                                <i class="bi bi-chat-dots"></i>
+                            <div class="icon-box bg-white bg-opacity-20 text-white">
+                                <i class="bi bi-currency-dollar"></i>
                             </div>
-                            <span class="badge bg-info rounded-pill">Recent</span>
+                            <span class="badge bg-white text-primary rounded-pill">Revenue</span>
                         </div>
-                        <h6 class="text-muted mb-1">Total Enquiries</h6>
-                        <h2 class="fw-bold mb-0 text-info"><%= enquiryCount %></h2>
+                        <h6 class="text-white-50 mb-1">Total Sales</h6>
+                        <h2 class="fw-bold mb-0">₹<%= String.format("%.0f", totalRevenue) %></h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collection Card -->
+            <div class="col-md-3">
+                <div class="card stat-card shadow-sm h-100 bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="icon-box bg-white bg-opacity-20 text-white">
+                                <i class="bi bi-piggy-bank"></i>
+                            </div>
+                            <span class="badge bg-white text-success rounded-pill">Collection</span>
+                        </div>
+                        <h6 class="text-white-50 mb-1">Total Collection</h6>
+                        <h2 class="fw-bold mb-0">₹<%= String.format("%.0f", totalCollection) %></h2>
                     </div>
                 </div>
             </div>
@@ -86,7 +122,7 @@
                             <div class="icon-box bg-danger bg-opacity-10 text-danger">
                                 <i class="bi bi-person-plus"></i>
                             </div>
-                            <span class="badge bg-danger rounded-pill">Pipeline</span>
+                            <span class="badge bg-danger rounded-pill">Leads</span>
                         </div>
                         <h6 class="text-muted mb-1">Total Leads</h6>
                         <h2 class="fw-bold mb-0 text-danger"><%= leadCount %></h2>
@@ -99,29 +135,81 @@
                 <div class="card stat-card shadow-sm h-100">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="icon-box bg-success bg-opacity-10 text-success">
+                            <div class="icon-box bg-info bg-opacity-10 text-info">
                                 <i class="bi bi-calendar-check"></i>
                             </div>
-                            <span class="badge bg-success rounded-pill">Closed</span>
+                            <span class="badge bg-info rounded-pill">Bookings</span>
                         </div>
                         <h6 class="text-muted mb-1">Total Bookings</h6>
-                        <h2 class="fw-bold mb-0 text-success"><%= bookingCount %></h2>
+                        <h2 class="fw-bold mb-0 text-info"><%= bookingCount %></h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enquiries Card -->
+            <div class="col-md-3">
+                <div class="card stat-card shadow-sm h-100 border-start border-4 border-info">
+                    <div class="card-body py-3">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box bg-info bg-opacity-10 text-info me-3">
+                                <i class="bi bi-chat-dots fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-0 small">Enquiries</h6>
+                                <h4 class="fw-bold mb-0"><%= enquiryCount %></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clients Card -->
+            <div class="col-md-3">
+                <div class="card stat-card shadow-sm h-100 border-start border-4 border-primary">
+                    <div class="card-body py-3">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box bg-primary bg-opacity-10 text-primary me-3">
+                                <i class="bi bi-people fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-0 small">Total Clients</h6>
+                                <h4 class="fw-bold mb-0"><%= clientCount %></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Card -->
+            <div class="col-md-3">
+                <div class="card stat-card shadow-sm h-100 border-start border-4 border-secondary">
+                    <div class="card-body py-3">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box bg-secondary bg-opacity-10 text-secondary me-3">
+                                <i class="bi bi-building fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-muted mb-0 small">Inventory Units</h6>
+                                <h4 class="fw-bold mb-0"><%= inventoryCount %></h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Pending Tasks Card -->
             <div class="col-md-3">
-                <div class="card stat-card shadow-sm h-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="icon-box bg-warning bg-opacity-10 text-warning">
-                                <i class="bi bi-list-task"></i>
+                <div class="card stat-card shadow-sm h-100 border-start border-4 border-warning">
+                    <div class="card-body py-3">
+                        <div class="d-flex align-items-center">
+                            <div class="icon-box bg-warning bg-opacity-10 text-warning me-3">
+                                <i class="bi bi-list-task fs-5"></i>
                             </div>
-                            <span class="badge bg-warning text-dark rounded-pill">Pending</span>
+                            <div>
+                                <h6 class="text-muted mb-0 small">Pending Tasks</h6>
+                                <h4 class="fw-bold mb-0 text-warning"><%= pendingTaskCount %></h4>
+                            </div>
                         </div>
-                        <h6 class="text-muted mb-1">Tasks Pending</h6>
-                        <h2 class="fw-bold mb-0 text-warning"><%= pendingTaskCount %></h2>
                     </div>
                 </div>
             </div>

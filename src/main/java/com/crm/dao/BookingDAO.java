@@ -141,6 +141,31 @@ public class BookingDAO {
         }
     }
 
+    public List<Payment> getPaymentsByBookingId(int bookingId) {
+        List<Payment> payments = new ArrayList<>();
+        String sql = "SELECT * FROM payments WHERE booking_id = ? ORDER BY payment_date DESC";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    payments.add(new Payment(
+                        rs.getInt("payment_id"),
+                        rs.getInt("booking_id"),
+                        rs.getDouble("amount"),
+                        rs.getDate("payment_date"),
+                        rs.getString("payment_method"),
+                        rs.getString("notes"),
+                        rs.getTimestamp("created_at")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return payments;
+    }
+
     public boolean deleteBooking(int id) {
         try (Connection con = DBConnection.getConnection()) {
             // Get flat_id first to reset status
