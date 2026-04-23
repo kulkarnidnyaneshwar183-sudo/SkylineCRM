@@ -12,42 +12,17 @@
     <title>Skyline CRM</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
-    <style>
-        body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-        .welcome-card {
-            text-align: center;
-            padding: 60px;
-        }
-        .btn-start {
-            background: white;
-            color: #1a1a2e;
-            padding: 12px 40px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 18px;
-            text-decoration: none;
-        }
-        .btn-start:hover {
-            background: #f0f0f0;
-            color: #1a1a2e;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-    <div class="welcome-card">
-        <h1 class="mb-2">🏢 Skyline CRM</h1>
-        <p class="mb-1 fs-5">Construction & Real Estate Management System</p>
-        <p class="text-muted mb-4">
-            Manage Enquiries, Leads, Clients, Flats & More
+<body class="login-page">
+    <div class="welcome-card card shadow-lg p-5 bg-white text-dark" style="border-radius: 20px; max-width: 500px;">
+        <img src="assets/img/flat-placeholder.jpg" class="img-fluid rounded-4 mb-4 shadow" alt="Flat Image">
+        <h1 class="mb-2 fw-bold">🏢 Skyline CRM</h1>
+        <p class="mb-1 fs-5 text-secondary">Real Estate Management</p>
+        <p class="text-muted mb-4 small">
+            Manage Enquiries, Leads, Clients, Flats & More with ease.
         </p>
-        <a href="login" class="btn-start">🚀 Get Started</a>
+        <a href="login" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">🚀 Sign In</a>
     </div>
 </body>
 </html>

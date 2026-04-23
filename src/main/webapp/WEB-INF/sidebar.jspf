@@ -1,97 +1,155 @@
 <%-- Navbar & Sidebar Fragment --%>
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
-    <div class="bg-dark text-white border-end" id="sidebar-wrapper" style="min-width: 250px; min-height: 100vh;">
-        <div class="sidebar-heading border-bottom p-4 fs-4 fw-bold text-center text-primary">🏢 Skyline CRM</div>
-        <div class="list-group list-group-flush mt-3">
-            <a href="dashboard.jsp" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+    <div class="bg-dark text-white border-end shadow" id="sidebar-wrapper" style="min-width: 280px; min-height: 100vh; z-index: 1000;">
+        <div class="sidebar-heading border-bottom p-4 fs-4 fw-bold text-center text-primary">
+            🏢 <span class="ms-1">Skyline CRM</span>
+        </div>
+        <div class="list-group list-group-flush mt-3 px-2">
+            <a href="dashboard.jsp" class="list-group-item list-group-item-action d-flex align-items-center mb-1 <%= request.getRequestURI().contains("dashboard.jsp") ? "active" : "" %>">
+                <i class="bi bi-grid-1x2-fill"></i> Dashboard
             </a>
-            <a href="enquiries" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-chat-dots me-2"></i> Enquiries
+            <a href="enquiries" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-chat-left-dots-fill"></i> Enquiries
             </a>
-            <a href="leads" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-person-plus me-2"></i> Leads
+            <a href="leads" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-person-plus-fill"></i> Leads
             </a>
-            <a href="followups" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-calendar-event me-2"></i> Follow-ups
+            <a href="followups" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-calendar2-week-fill"></i> Follow-ups
             </a>
-            <a href="clients" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-people me-2"></i> Clients
+            <a href="clients" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-people-fill"></i> Clients
             </a>
-            <a href="inventory" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-building me-2"></i> Inventory
+            <a href="inventory" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-building-fill"></i> Inventory
             </a>
-            <a href="expenses" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-wallet2 me-2"></i> Expenses
+            <a href="expenses" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-wallet2"></i> Expenses
             </a>
-            <a href="vendors" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-truck me-2"></i> Vendors
+            <a href="vendors" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-truck"></i> Vendors
             </a>
-            <a href="bookings" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-calendar-check me-2"></i> Bookings
+            <a href="bookings" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-journal-check"></i> Bookings
             </a>
-            <a href="tasks" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-list-check me-2"></i> Tasks
+            <a href="tasks" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-check2-square"></i> Tasks
             </a>
-            <a href="documents.jsp" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                <i class="bi bi-file-earmark-text me-2"></i> Documents
+            <a href="documents.jsp" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                <i class="bi bi-file-earmark-text-fill"></i> Documents
             </a>
             <% if("Admin".equalsIgnoreCase((String)session.getAttribute("role"))) { %>
-                <a href="users" class="list-group-item list-group-item-action bg-dark text-white border-0 py-3 px-4 hover-effect">
-                    <i class="bi bi-gear me-2"></i> User Management
+                <hr class="mx-3 opacity-25">
+                <a href="users" class="list-group-item list-group-item-action d-flex align-items-center mb-1">
+                    <i class="bi bi-person-gear"></i> User Management
                 </a>
             <% } %>
-            <hr class="mx-4 bg-secondary">
-            <a href="logout" class="list-group-item list-group-item-action bg-dark text-danger border-0 py-3 px-4 mt-auto">
-                <i class="bi bi-box-arrow-left me-2"></i> Logout
-            </a>
+            <div class="mt-auto mb-4 px-3 pt-4">
+                <a href="logout" class="btn btn-outline-danger w-100 rounded-pill d-flex align-items-center justify-content-center">
+                    <i class="bi bi-box-arrow-left me-2"></i> Logout
+                </a>
+            </div>
         </div>
     </div>
+
     <!-- Page Content -->
     <div id="page-content-wrapper" class="w-100 bg-light">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 shadow-sm">
-            <div class="container-fluid">
-                <div class="d-flex align-items-center">
-                    <%
-                        String profileImg = (String) session.getAttribute("profileImage");
-                        if(profileImg == null || profileImg.isEmpty()) profileImg = "default.png";
-                    %>
-                    <div class="position-relative">
-                        <img src="uploads/<%= profileImg %>" class="rounded-circle border me-3 shadow-sm" 
-                             style="width: 40px; height: 40px; object-fit: cover; cursor: pointer;" 
-                             data-bs-toggle="modal" data-bs-target="#profileModal"
-                             onerror="this.src='https://ui-avatars.com/api/?name=<%= session.getAttribute("fullName") %>&background=random'">
-                        <span class="position-absolute bottom-0 end-0 bg-primary rounded-circle border border-white" style="width: 12px; height: 12px; transform: translate(-10px, -5px);"></span>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-4 shadow-sm py-3">
+            <div class="container-fluid p-0">
+                <button class="btn btn-outline-primary rounded-circle me-3" id="menu-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                
+                <div class="d-none d-md-flex align-items-center flex-grow-1 mx-4">
+                    <div class="search-bar-container w-50">
+                        <i class="bi bi-search"></i>
+                        <input type="text" class="form-control" placeholder="Search anything...">
                     </div>
-                    <span class="navbar-text text-dark">
-                        Welcome back, <strong><%= session.getAttribute("fullName") %></strong> 
-                        <span class="badge bg-primary ms-2"><%= session.getAttribute("role") %></span>
-                    </span>
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <!-- Theme Toggle -->
+                    <button class="btn btn-light rounded-circle me-3" id="theme-toggle" title="Toggle Dark/Light Mode">
+                        <i class="bi bi-moon-fill" id="theme-icon"></i>
+                    </button>
+
+                    <div class="dropdown me-3">
+                        <button class="btn btn-light rounded-circle position-relative" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.5rem; padding: 0.35em 0.5em;">
+                                3
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 p-2" style="width: 300px; border-radius: 15px;">
+                            <li class="p-2 border-bottom fw-bold">Notifications</li>
+                            <li><a class="dropdown-item p-3 rounded-3 mt-1" href="#"><i class="bi bi-info-circle text-primary me-2"></i>New lead captured!</a></li>
+                            <li><a class="dropdown-item p-3 rounded-3 mt-1" href="#"><i class="bi bi-calendar-event text-warning me-2"></i>Follow-up due today</a></li>
+                            <li><a class="dropdown-item p-3 rounded-3 mt-1" href="#"><i class="bi bi-check-circle text-success me-2"></i>Booking confirmed</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Logout Button -->
+                    <a href="logout" class="btn btn-light rounded-circle me-3 text-danger" title="Logout">
+                        <i class="bi bi-box-arrow-left"></i>
+                    </a>
+
+                    <div class="dropdown">
+                        <%
+                            String profileImg = (String) session.getAttribute("profileImage");
+                            if(profileImg == null || profileImg.isEmpty()) profileImg = "default.png";
+                        %>
+                        <div class="d-flex align-items-center dropdown-toggle cursor-pointer" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
+                            <div class="position-relative">
+                                <img src="uploads/<%= profileImg %>" class="rounded-circle border shadow-sm" 
+                                     style="width: 40px; height: 40px; object-fit: cover;" 
+                                     onerror="this.src='https://ui-avatars.com/api/?name=<%= session.getAttribute("fullName") %>&background=random'">
+                                <span class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-white" style="width: 12px; height: 12px;"></span>
+                            </div>
+                            <div class="ms-2 d-none d-sm-block text-start">
+                                <div class="fw-bold small line-height-1"><%= session.getAttribute("fullName") %></div>
+                                <div class="text-muted" style="font-size: 0.7rem;"><%= session.getAttribute("role") %></div>
+                            </div>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-3 p-2" style="border-radius: 15px;">
+                            <li><a class="dropdown-item rounded-3" href="#" data-bs-toggle="modal" data-bs-target="#profileModal"><i class="bi bi-person me-2"></i>Profile Settings</a></li>
+                            <li><a class="dropdown-item rounded-3" href="#"><i class="bi bi-shield-lock me-2"></i>Security</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item rounded-3 text-danger" href="logout"><i class="bi bi-box-arrow-left me-2"></i>Sign Out</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
         
         <!-- Profile Modal -->
         <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content border-0 shadow" style="border-radius: 15px;">
-                    <div class="modal-header bg-dark text-white" style="border-radius: 15px 15px 0 0;">
-                        <h6 class="modal-title fw-bold">Update Profile Photo</h6>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+                    <div class="modal-header border-bottom-0 p-4 pb-0">
+                        <h5 class="modal-title fw-bold">Profile Photo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="upload?type=profile" method="POST" enctype="multipart/form-data">
                         <div class="modal-body text-center p-4">
-                            <img src="uploads/<%= profileImg %>" class="rounded-circle border mb-3 shadow-sm" 
-                                 style="width: 100px; height: 100px; object-fit: cover;"
-                                 onerror="this.src='https://ui-avatars.com/api/?name=<%= session.getAttribute("fullName") %>&background=random'">
-                            <input type="file" name="file" class="form-control form-control-sm" required>
+                            <div class="position-relative d-inline-block mb-4">
+                                <img src="uploads/<%= profileImg %>" class="rounded-circle border shadow-sm" 
+                                     style="width: 120px; height: 120px; object-fit: cover;"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=<%= session.getAttribute("fullName") %>&background=random'">
+                                <label for="fileInput" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 35px; height: 35px; cursor: pointer;">
+                                    <i class="bi bi-camera-fill"></i>
+                                </label>
+                                <input type="file" name="file" id="fileInput" class="d-none" onchange="this.form.submit()">
+                            </div>
+                            <h6 class="fw-bold mb-1"><%= session.getAttribute("fullName") %></h6>
+                            <p class="text-muted small"><%= session.getAttribute("role") %></p>
                         </div>
-                        <div class="modal-footer border-0 p-3 pt-0">
-                            <button type="submit" class="btn btn-primary btn-sm w-100 rounded-pill">Upload Photo</button>
+                        <div class="modal-footer border-0 p-4 pt-0">
+                            <button type="button" class="btn btn-light w-100 rounded-pill" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="p-4">
+        <div class="p-4 p-md-5">
+

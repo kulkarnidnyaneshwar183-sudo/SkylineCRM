@@ -14,90 +14,101 @@
     <title>Task Management - Skyline CRM</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        .hover-effect:hover { background-color: #0d6efd !important; border-radius: 5px; margin: 0 10px; transition: 0.3s; }
-        .task-card { border-radius: 15px; border: none; }
-        .completed { text-decoration: line-through; color: #6c757d; }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-light">
 
     <%@ include file="WEB-INF/sidebar.jspf" %>
 
     <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold m-0"><i class="bi bi-list-task me-2"></i>Task Management</h3>
-            <button class="btn btn-dark rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div>
+                <h3 class="fw-bold m-0 text-dark"><i class="bi bi-list-task me-2 text-primary"></i>Task Management</h3>
+                <p class="text-muted small mb-0">Assign, track, and manage team tasks and deadlines.</p>
+            </div>
+            <button class="btn btn-primary-custom rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addTaskModal">
                 <i class="bi bi-plus-lg me-2"></i>New Task
             </button>
         </div>
 
-        <div class="row">
-            <!-- Task List -->
-            <div class="col-12">
-                <div class="card border-0 shadow-sm task-card">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="bg-light">
-                                    <tr>
-                                        <th class="ps-4">Task Details</th>
-                                        <th>Assigned To</th>
-                                        <th>Deadline</th>
-                                        <th>Status</th>
-                                        <th class="pe-4 text-end">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% if(taskList != null && !taskList.isEmpty()) { 
-                                        for(Task t : taskList) { %>
-                                        <tr>
-                                            <td class="ps-4">
-                                                <div class="fw-bold <%= t.getStatus().equals("Completed") ? "completed" : "" %>">
-                                                    <%= t.getTitle() %>
-                                                </div>
-                                                <small class="text-muted"><%= t.getDescription() %></small>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-secondary bg-opacity-10 text-secondary border px-3">
-                                                    <%= t.getAssignedToName() %>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="<%= t.getStatus().equals("Pending") ? "text-danger fw-bold" : "text-muted" %>">
-                                                    <i class="bi bi-clock me-1"></i><%= t.getDeadline() %>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="badge <%= t.getStatus().equals("Completed") ? "bg-success" : "bg-warning text-dark" %> rounded-pill">
-                                                    <%= t.getStatus() %>
-                                                </span>
-                                            </td>
-                                            <td class="pe-4 text-end">
+        <!-- Task List -->
+        <div class="card table-card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Task Details</th>
+                                <th>Assigned To</th>
+                                <th>Deadline</th>
+                                <th>Status</th>
+                                <th class="pe-4 text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(taskList != null && !taskList.isEmpty()) { 
+                                for(Task t : taskList) { 
+                                    boolean isCompleted = "Completed".equals(t.getStatus());
+                            %>
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold <%= isCompleted ? "text-strike" : "" %> text-dark">
+                                            <%= t.getTitle() %>
+                                        </div>
+                                        <div class="small text-muted text-truncate" style="max-width: 300px;"><%= t.getDescription() %></div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar bg-info bg-opacity-10 text-info rounded-3 me-2" style="width: 24px; height: 24px; font-size: 0.7rem;">
+                                                <%= t.getUserName().substring(0,1).toUpperCase() %>
+                                            </div>
+                                            <span class="small fw-medium"><%= t.getUserName() %></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="small <%= !isCompleted ? "text-danger fw-bold" : "text-muted" %>">
+                                            <i class="bi bi-clock me-1"></i><%= t.getDeadline() %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <% 
+                                            String statusClass = isCompleted ? "bg-success bg-opacity-10 text-success" : "bg-warning bg-opacity-10 text-warning";
+                                        %>
+                                        <span class="badge <%= statusClass %> rounded-pill px-3">
+                                            <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i>
+                                            <%= t.getStatus() %>
+                                        </span>
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <div class="dropdown">
+                                            <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2" style="border-radius: 12px;">
                                                 <% if(t.getStatus().equals("Pending")) { %>
-                                                    <a href="tasks?action=complete&id=<%= t.getTaskId() %>" class="btn btn-sm btn-success me-1">
-                                                        <i class="bi bi-check-lg"></i> Complete
-                                                    </a>
+                                                    <li><a class="dropdown-item rounded-2 text-success" href="tasks?action=complete&id=<%= t.getTaskId() %>">
+                                                        <i class="bi bi-check-circle me-2"></i> Mark Completed</a></li>
                                                 <% } %>
-                                                <a href="tasks?action=delete&id=<%= t.getTaskId() %>" 
-                                                   class="btn btn-sm btn-outline-danger"
-                                                   onclick="return confirm('Remove this task?')">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <% } } else { %>
-                                        <tr>
-                                            <td colspan="5" class="text-center py-5 text-muted">
-                                                <i class="bi bi-check2-square display-4"></i>
-                                                <p class="mt-2">No tasks assigned yet.</p>
-                                            </td>
-                                        </tr>
-                                    <% } %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                                <li><hr class="dropdown-divider opacity-50"></li>
+                                                <li><a class="dropdown-item rounded-2 text-danger" href="tasks?action=delete&id=<%= t.getTaskId() %>" onclick="return confirm('Remove this task?')">
+                                                    <i class="bi bi-trash me-2"></i> Delete Task</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% } } else { %>
+                                <tr>
+                                    <td colspan="5" class="text-center py-5 text-muted">
+                                        <div class="mb-3">
+                                            <i class="bi bi-check2-square display-1 opacity-25"></i>
+                                        </div>
+                                        <h5 class="fw-bold">No tasks found</h5>
+                                        <p class="small">Assign tasks to your team to stay organized.</p>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -105,11 +116,11 @@
 
     <!-- Add Task Modal -->
     <div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content border-0 shadow" style="border-radius: 15px;">
-                <div class="modal-header bg-dark text-white" style="border-radius: 15px 15px 0 0;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 20px;">
+                <div class="modal-header border-0 p-4 pb-0">
                     <h5 class="modal-title fw-bold">Create New Task</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="tasks?action=add" method="POST">
                     <div class="modal-body p-4">
@@ -119,34 +130,38 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Description</label>
-                            <textarea name="description" class="form-control" rows="3"></textarea>
+                            <textarea name="description" class="form-control" rows="3" placeholder="Add more details about the task..."></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold">Assign To</label>
-                            <select name="assignedTo" class="form-select" required>
-                                <% if(userList != null) { 
-                                    for(User u : userList) { %>
-                                    <option value="<%= u.getUserId() %>"><%= u.getFullName() %> (<%= u.getRole() %>)</option>
-                                <% } } %>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold">Deadline</label>
-                            <input type="date" name="deadline" class="form-control" required>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Assign To</label>
+                                <select name="assignedTo" class="form-select" required>
+                                    <% if(userList != null) { 
+                                        for(User u : userList) { %>
+                                        <option value="<%= u.getUserId() %>"><%= u.getFullName() %></option>
+                                    <% } } %>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Deadline</label>
+                                <input type="date" name="deadline" class="form-control" required>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer border-0 p-4 pt-0">
                         <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-dark rounded-pill px-4">Assign Task</button>
+                        <button type="submit" class="btn btn-primary-custom rounded-pill px-4">Assign Task</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    </div><!-- Close p-4 p-md-5 -->
     </div><!-- Close page-content-wrapper -->
 </div><!-- Close d-flex wrapper -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
