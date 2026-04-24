@@ -25,8 +25,8 @@
                 <h3 class="fw-bold m-0 text-dark"><i class="bi bi-building-fill me-2 text-primary"></i>Property Inventory</h3>
                 <p class="text-muted small mb-0">Monitor and manage available units across all projects.</p>
             </div>
-            <button class="btn btn-primary-custom rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#addFlatModal">
-                <i class="bi bi-plus-lg me-2"></i>Add New Property
+            <button class="btn btn-sm btn-primary-custom rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addFlatModal">
+                <i class="bi bi-plus-lg me-1"></i>Add New Property
             </button>
         </div>
 

@@ -2,8 +2,16 @@
 <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <div class="bg-dark text-white border-end shadow" id="sidebar-wrapper" style="min-width: 280px; min-height: 100vh; z-index: 1000;">
-        <div class="sidebar-heading border-bottom p-4 fs-4 fw-bold text-center text-primary">
-            🏢 <span class="ms-1">Skyline CRM</span>
+        <div class="sidebar-heading border-bottom p-4 text-center">
+            <div class="d-flex align-items-center justify-content-center mb-1">
+                <i class="bi bi-buildings-fill fs-2 text-primary me-2"></i>
+                <span class="fs-4 fw-bold text-white">Skyline <span class="text-primary">CRM</span></span>
+            </div>
+            <div class="mt-2">
+                <span class="growth-badge">
+                    <i class="bi bi-graph-up-arrow me-1"></i> Accelerate Your Growth
+                </span>
+            </div>
         </div>
         <div class="list-group list-group-flush mt-3 px-2">
             <a href="dashboard.jsp" class="list-group-item list-group-item-action d-flex align-items-center mb-1 <%= request.getRequestURI().contains("dashboard.jsp") ? "active" : "" %>">

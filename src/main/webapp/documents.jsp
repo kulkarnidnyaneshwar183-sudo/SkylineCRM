@@ -45,10 +45,14 @@
                         </thead>
                         <tbody>
                             <%
-                                try (Connection con = DBConnection.getConnection()) {
+                                Connection con = null;
+                                Statement st = null;
+                                ResultSet rs = null;
+                                try {
+                                    con = DBConnection.getConnection();
                                     String sql = "SELECT d.*, u.full_name as user_name FROM documents d JOIN users u ON d.uploaded_by = u.user_id ORDER BY d.uploaded_at DESC";
-                                    Statement st = con.createStatement();
-                                    ResultSet rs = st.executeQuery(sql);
+                                    st = con.createStatement();
+                                    rs = st.executeQuery(sql);
                                     boolean hasDocs = false;
                                     while (rs.next()) {
                                         hasDocs = true;
@@ -100,7 +104,13 @@
                                     </tr>
                             <%
                                     }
-                                } catch (Exception e) { e.printStackTrace(); }
+                                } catch (Exception e) { 
+                                    e.printStackTrace(); 
+                                } finally {
+                                    if (rs != null) try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                                    if (st != null) try { st.close(); } catch (SQLException e) { e.printStackTrace(); }
+                                    if (con != null) try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+                                }
                             %>
                         </tbody>
                     </table>

@@ -124,10 +124,26 @@ body {
     transition: var(--transition);
 }
 
-.search-pro:focus-within {
-    background: white;
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+.growth-badge {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+    transition: var(--transition);
+}
+
+.growth-badge:hover {
+    background: rgba(59, 130, 246, 0.25);
+    transform: scale(1.05);
+    color: #ffffff;
 }
 
 
